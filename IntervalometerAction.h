@@ -3,6 +3,7 @@
 
 //-------------------------------------------------------------------------
 
+#include "FocusShootDelayAction.h"
 #include "IntervalAction.h"
 
 //-------------------------------------------------------------------------
@@ -28,10 +29,10 @@ public:
         IntervalTimerManagerInterface& itmi,
         LiquidCrystal& lcd);
 
-	void begin();
+    void begin();
 
-	void startShooting();
-	void stopShooting();
+    void startShooting();
+    void stopShooting();
 
     void right();
     void up();
@@ -44,21 +45,19 @@ public:
 private:
 
     void display();
-	void formatShots(uint32_t number);
+    void formatShots(uint32_t number);
 
-	static uint16_t incrementInterval(uint16_t interval);
-	static uint16_t decrementInterval(uint16_t interval);
+    static uint16_t incrementInterval(uint16_t interval);
+    static uint16_t decrementInterval(uint16_t interval);
 
-    uint8_t _focusPin;
-    uint8_t _shootPin;
     uint32_t _numberOfShots;
     uint32_t _shotNumber;
-	uint16_t _shotInterval;
-	uint16_t _shotTimeCount;
-    uint16_t _focusShootDelay;
+    uint16_t _shotInterval;
+    uint16_t _shotTimeCount;
     uint8_t _menu;
     boolean _shooting;
     LiquidCrystal& _lcd;
+    FocusShootDelayAction _focusShootDelayAction;
 };
 
 //-------------------------------------------------------------------------

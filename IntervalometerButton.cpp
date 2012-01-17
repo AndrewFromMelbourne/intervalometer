@@ -17,10 +17,10 @@ IntervalometerButton:: pressed()
 void
 IntervalometerButton:: repeated()
 {
-	if (getId() != SELECT)
-	{
-		pressed();
-	}
+    if (getId() != SELECT)
+    {
+        pressed();
+    }
 }
 
 //-------------------------------------------------------------------------
