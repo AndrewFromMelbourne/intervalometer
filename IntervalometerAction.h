@@ -47,13 +47,15 @@ private:
     void display();
     void formatShots(uint32_t number);
 
+	static uint16_t intervals[9];
+
     static uint16_t incrementInterval(uint16_t interval);
     static uint16_t decrementInterval(uint16_t interval);
 
     uint32_t _numberOfShots;
     uint32_t _shotNumber;
     uint16_t _shotInterval;
-    uint16_t _shotTimeCount;
+    uint16_t _shotTimeCountDown;
     uint8_t _menu;
     boolean _shooting;
     LiquidCrystal& _lcd;

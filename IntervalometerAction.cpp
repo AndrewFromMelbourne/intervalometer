@@ -16,7 +16,7 @@ IntervalometerAction:: IntervalometerAction(
     _numberOfShots(0),
     _shotNumber(0),
     _shotInterval(shotInterval),
-    _shotTimeCount(0),
+    _shotTimeCountDown(0),
     _menu(INTERVAL),
     _shooting(false),
     _lcd(lcd),
@@ -41,9 +41,8 @@ IntervalometerAction:: startShooting()
     _shooting = isActive();
     if (_shooting)
     {
-        _shotTimeCount = _shotInterval;
+        _shotTimeCountDown = 0;
         action();
-        display();
     }
 }
 
@@ -54,7 +53,6 @@ IntervalometerAction:: stopShooting()
 {
     _shooting = false;
     _shotNumber = 0;
-    _shotTimeCount = 0;
     deactivate();
     display();
 }
@@ -289,14 +287,13 @@ IntervalometerAction:: select()
 void
 IntervalometerAction:: action()
 {
-    display();
-
-    if (_shotTimeCount >= _shotInterval)
+    if (_shotTimeCountDown == 0)
     {
         _shotNumber += 1;
 
         _focusShootDelayAction.focusAndShoot();
 
+		display();
 
         if ((_numberOfShots > 0) && (_shotNumber >= _numberOfShots))
         {
@@ -304,14 +301,18 @@ IntervalometerAction:: action()
         }
         else
         {
-            _shotTimeCount = 0;
+            _shotTimeCountDown = _shotInterval;
         }
     }
-    else
-    {
-    }
+	else
+	{
+		display();
+	}
 
-    ++_shotTimeCount;
+    if (_shotTimeCountDown > 0)
+	{
+		--_shotTimeCountDown;
+	}
 }
 
 //-------------------------------------------------------------------------
@@ -327,9 +328,8 @@ IntervalometerAction:: display()
     {
         if (_shotInterval > 1)
         {
-            uint16_t remains = _shotInterval - _shotTimeCount;
-            uint16_t minutes = remains / 60;
-            uint16_t seconds = remains % 60;
+            uint16_t minutes = _shotTimeCountDown / 60;
+            uint16_t seconds = _shotTimeCountDown % 60;
 
             if (minutes < 10)
             {
@@ -349,10 +349,10 @@ IntervalometerAction:: display()
         }
         else
         {
-            _lcd.print("     ");
+            _lcd.print(F("     "));
         }
 
-        _lcd.print(" shot:");
+        _lcd.print(F(" shot:"));
         formatShots(_shotNumber % 10000);
     }
     else
@@ -361,12 +361,12 @@ IntervalometerAction:: display()
         {
         case INTERVAL:
 
-            _lcd.print("shot interval   ");
+            _lcd.print(F("shot interval   "));
             break;
 
         case FOCUS_SHOOT_DELAY:
         {
-            _lcd.print("FS Delay: ");
+            _lcd.print(F("FS Delay: "));
 
             uint32_t focusShootDelay = _focusShootDelayAction.getInterval();
 
@@ -381,13 +381,13 @@ IntervalometerAction:: display()
             }
 
             _lcd.print(focusShootDelay, DEC);
-            _lcd.print(" ms");
+            _lcd.print(F(" ms"));
 
             break;
         }
         case NUMBER_OF_SHOTS:
 
-            _lcd.print("number of shots ");
+            _lcd.print(F("number of shots "));
             break;
         }
     }
@@ -419,7 +419,7 @@ IntervalometerAction:: display()
         _lcd.print('S');
     }
 
-    _lcd.print("  shots:");
+    _lcd.print(F("  shots:"));
     formatShots(_numberOfShots);
 }
 
@@ -431,31 +431,30 @@ IntervalometerAction:: formatShots(
 {
     if (number == 0)
     {
-        _lcd.print("-----");
+        _lcd.print(F("-----"));
     }
+	else
+	{
+		for (uint32_t placeValue = 10000; placeValue > 1; placeValue /= 10)
+		{
+			if (number < placeValue)
+			{
+				_lcd.print(' ');
+			}
+			else
+			{
+				break;
+			}
+		}
 
-    if (number < 10000)
-    {
-        _lcd.print(' ');
-    }
-
-    if (number < 1000)
-    {
-        _lcd.print(' ');
-    }
-
-    if (number < 100)
-    {
-        _lcd.print(' ');
-    }
-
-    if (number < 10)
-    {
-        _lcd.print(' ');
-    }
-
-    _lcd.print(number, DEC);
+		_lcd.print(number, DEC);
+	}
 }
+
+//-------------------------------------------------------------------------
+
+uint16_t
+IntervalometerAction:: intervals[9] = { 1, 2, 4, 5, 10, 20, 30, 40, 60 };
 
 //-------------------------------------------------------------------------
 
@@ -463,42 +462,23 @@ uint16_t
 IntervalometerAction:: incrementInterval(
     uint16_t interval)
 {
-    if (interval < 1)
-    {
-        interval = 1;
-    }
-    else if (interval < 2)
-    {
-        interval = 2;
-    }
-    else if (interval < 4)
-    {
-        interval = 4;
-    }
-    else if (interval < 5)
-    {
-        interval = 5;
-    }
-    else if (interval < 10)
-    {
-        interval = 10;
-    }
-    else if (interval < 20)
-    {
-        interval = 20;
-    }
-    else if (interval < 30)
-    {
-        interval = 30;
-    }
-    else if (interval < 40)
-    {
-        interval = 40;
-    }
-    else
-    {
-        interval = 60;
-    }
+	uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+
+	if (interval >= intervals[numberOfIntervals - 1])
+	{
+		interval = intervals[numberOfIntervals - 1];
+	}
+	else
+	{
+		for (uint8_t i = 0 ; i < numberOfIntervals ; ++i)
+		{
+			if (interval < intervals[i])
+			{
+				interval = intervals[i];
+				break;
+			}
+		}
+	}
 
     return interval;
 }
@@ -509,42 +489,23 @@ uint16_t
 IntervalometerAction:: decrementInterval(
     uint16_t interval)
 {
-    if (interval > 60)
-    {
-        interval = 60;
-    }
-    else if (interval > 40)
-    {
-        interval = 40;
-    }
-    else if (interval > 30)
-    {
-        interval = 30;
-    }
-    else if (interval > 20)
-    {
-        interval = 20;
-    }
-    else if (interval > 10)
-    {
-        interval = 10;
-    }
-    else if (interval > 5)
-    {
-        interval = 5;
-    }
-    else if (interval > 4)
-    {
-        interval = 4;
-    }
-    else if (interval > 2)
-    {
-        interval = 2;
-    }
-    else
-    {
-        interval = 1;
-    }
+	uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+
+	if (interval  <= intervals[0])
+	{
+		interval = intervals[0];
+	}
+	else
+	{
+		for (int8_t i = numberOfIntervals - 1 ; i >= 0 ; --i)
+		{
+			if (interval > intervals[i])
+			{
+				interval = intervals[i];
+				break;
+			}
+		}
+	}
 
     return interval;
 }
