@@ -43,7 +43,7 @@ FocusShootDelayAction:: press()
 {
     digitalWrite(13, HIGH);
 
-	// FIXME focus
+    // FIXME focus
     //digitalWrite(_focusPin, HIGH);
     //digitalWrite(_shootPin, HIGH);
 
@@ -56,7 +56,7 @@ FocusShootDelayAction:: release()
 {
     digitalWrite(13, LOW);
 
-	// FIXME shoot
+    // FIXME shoot
     //digitalWrite(_shootPin, LOW);
     //digitalWrite(_focusPin, LOW);
 }

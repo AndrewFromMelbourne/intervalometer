@@ -293,7 +293,7 @@ IntervalometerAction:: action()
 
         _focusShootDelayAction.focusAndShoot();
 
-		display();
+        display();
 
         if ((_numberOfShots > 0) && (_shotNumber >= _numberOfShots))
         {
@@ -304,15 +304,15 @@ IntervalometerAction:: action()
             _shotTimeCountDown = _shotInterval;
         }
     }
-	else
-	{
-		display();
-	}
+    else
+    {
+        display();
+    }
 
     if (_shotTimeCountDown > 0)
-	{
-		--_shotTimeCountDown;
-	}
+    {
+        --_shotTimeCountDown;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -433,22 +433,22 @@ IntervalometerAction:: formatShots(
     {
         _lcd.print(F("-----"));
     }
-	else
-	{
-		for (uint32_t placeValue = 10000; placeValue > 1; placeValue /= 10)
-		{
-			if (number < placeValue)
-			{
-				_lcd.print(' ');
-			}
-			else
-			{
-				break;
-			}
-		}
+    else
+    {
+        for (uint32_t placeValue = 10000; placeValue > 1; placeValue /= 10)
+        {
+            if (number < placeValue)
+            {
+                _lcd.print(' ');
+            }
+            else
+            {
+                break;
+            }
+        }
 
-		_lcd.print(number, DEC);
-	}
+        _lcd.print(number, DEC);
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -462,23 +462,23 @@ uint16_t
 IntervalometerAction:: incrementInterval(
     uint16_t interval)
 {
-	uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+    uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
 
-	if (interval >= intervals[numberOfIntervals - 1])
-	{
-		interval = intervals[numberOfIntervals - 1];
-	}
-	else
-	{
-		for (uint8_t i = 0 ; i < numberOfIntervals ; ++i)
-		{
-			if (interval < intervals[i])
-			{
-				interval = intervals[i];
-				break;
-			}
-		}
-	}
+    if (interval >= intervals[numberOfIntervals - 1])
+    {
+        interval = intervals[numberOfIntervals - 1];
+    }
+    else
+    {
+        for (uint8_t i = 0 ; i < numberOfIntervals ; ++i)
+        {
+            if (interval < intervals[i])
+            {
+                interval = intervals[i];
+                break;
+            }
+        }
+    }
 
     return interval;
 }
@@ -489,23 +489,23 @@ uint16_t
 IntervalometerAction:: decrementInterval(
     uint16_t interval)
 {
-	uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+    uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
 
-	if (interval  <= intervals[0])
-	{
-		interval = intervals[0];
-	}
-	else
-	{
-		for (int8_t i = numberOfIntervals - 1 ; i >= 0 ; --i)
-		{
-			if (interval > intervals[i])
-			{
-				interval = intervals[i];
-				break;
-			}
-		}
-	}
+    if (interval  <= intervals[0])
+    {
+        interval = intervals[0];
+    }
+    else
+    {
+        for (int8_t i = numberOfIntervals - 1 ; i >= 0 ; --i)
+        {
+            if (interval > intervals[i])
+            {
+                interval = intervals[i];
+                break;
+            }
+        }
+    }
 
     return interval;
 }

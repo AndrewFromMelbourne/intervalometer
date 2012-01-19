@@ -47,7 +47,7 @@ private:
     void display();
     void formatShots(uint32_t number);
 
-	static uint16_t intervals[9];
+    static uint16_t intervals[9];
 
     static uint16_t incrementInterval(uint16_t interval);
     static uint16_t decrementInterval(uint16_t interval);
