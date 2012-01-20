@@ -12,14 +12,16 @@ IntervalometerAction:: IntervalometerAction(
     IntervalTimerManagerInterface& itmi,
     LiquidCrystal& lcd)
 :
-    IntervalAction(id, 1000, itmi),
+    IntervalAction(id, 40, itmi),
     _numberOfShots(0),
     _shotNumber(0),
     _shotInterval(shotInterval),
     _shotTimeCountDown(0),
     _menu(INTERVAL),
+    _countdownStyle(TIME),
     _shooting(false),
     _lcd(lcd),
+    _lcdRowGraph(lcd, 0, 25, 0, 0, 4),
     _focusShootDelayAction(1, 500, focusPin, shootPin, itmi)
 {
 }
@@ -60,6 +62,21 @@ IntervalometerAction:: stopShooting()
 //-------------------------------------------------------------------------
 
 void
+IntervalometerAction:: toggleCountdownStyle()
+{
+    if (_countdownStyle == TIME)
+    {
+        _countdownStyle = GRAPH;
+    }
+    else
+    {
+        _countdownStyle = TIME;
+    }
+}
+
+//-------------------------------------------------------------------------
+
+void
 IntervalometerAction:: up()
 {
     if (not _shooting)
@@ -84,6 +101,10 @@ IntervalometerAction:: up()
         }
 
         display();
+    }
+    else
+    {
+        toggleCountdownStyle();
     }
 }
 
@@ -114,6 +135,10 @@ IntervalometerAction:: down()
         }
 
         display();
+    }
+    else
+    {
+        toggleCountdownStyle();
     }
 }
 
@@ -301,7 +326,7 @@ IntervalometerAction:: action()
         }
         else
         {
-            _shotTimeCountDown = _shotInterval;
+            _shotTimeCountDown = _shotInterval * 25;
         }
     }
     else
@@ -326,10 +351,10 @@ IntervalometerAction:: display()
 
     if (_shooting)
     {
-        if (_shotInterval > 1)
+        if ((_countdownStyle == TIME) && (_shotInterval > 1))
         {
-            uint16_t minutes = _shotTimeCountDown / 60;
-            uint16_t seconds = _shotTimeCountDown % 60;
+            uint16_t minutes = _shotTimeCountDown / 1500;
+            uint16_t seconds = (_shotTimeCountDown / 25) % 60;
 
             if (minutes < 10)
             {
@@ -337,7 +362,7 @@ IntervalometerAction:: display()
             }
 
             _lcd.print(minutes, DEC);
-            
+                
             _lcd.print(':');
 
             if (seconds < 10)
@@ -349,9 +374,11 @@ IntervalometerAction:: display()
         }
         else
         {
-            _lcd.print(F("     "));
+            _lcdRowGraph.setMinMax(0, (_shotInterval * 25) - 1);
+            _lcdRowGraph.value(_shotTimeCountDown);
         }
 
+        _lcd.setCursor(5, 0);
         _lcd.print(F(" shot:"));
         formatShots(_shotNumber % 10000);
     }

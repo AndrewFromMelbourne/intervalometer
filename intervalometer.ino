@@ -4,11 +4,12 @@
 #include "IntervalometerButton.h"
 
 #include <LiquidCrystal.h>
+#include <LcdRowGraph.h>
 
 //-------------------------------------------------------------------------
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
-AnalogButtonManager<5> analogButtonManager(A0, 30);
+AnalogButtonManager<5> analogButtonManager(A0);
 IntervalTimerManager<2> intervalTimerManager;
 
 IntervalometerAction intervalometerAction(

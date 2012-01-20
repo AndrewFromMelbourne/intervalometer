@@ -3,8 +3,9 @@
 
 //-------------------------------------------------------------------------
 
-#include "FocusShootDelayAction.h"
 #include "IntervalAction.h"
+#include "FocusShootDelayAction.h"
+#include "LcdRowGraph.h"
 
 //-------------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ class IntervalometerAction
 public:
 
     enum Menu { INTERVAL, FOCUS_SHOOT_DELAY, NUMBER_OF_SHOTS };
+    enum CountdownStyle { TIME, GRAPH };
 
     IntervalometerAction(
         uint8_t id,
@@ -33,6 +35,8 @@ public:
 
     void startShooting();
     void stopShooting();
+
+    void toggleCountdownStyle();
 
     void right();
     void up();
@@ -56,9 +60,11 @@ private:
     uint32_t _shotNumber;
     uint16_t _shotInterval;
     uint16_t _shotTimeCountDown;
-    uint8_t _menu;
+    Menu _menu;
+    CountdownStyle _countdownStyle;
     boolean _shooting;
     LiquidCrystal& _lcd;
+    LcdRowGraph _lcdRowGraph;
     FocusShootDelayAction _focusShootDelayAction;
 };
 
