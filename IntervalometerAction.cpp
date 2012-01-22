@@ -12,7 +12,7 @@ IntervalometerAction:: IntervalometerAction(
     IntervalTimerManagerInterface& itmi,
     LiquidCrystal& lcd)
 :
-    IntervalAction(id, 40, itmi),
+    IntervalAction(id, ActionInterval, itmi),
     _numberOfShots(0),
     _shotNumber(0),
     _shotInterval(shotInterval),
@@ -21,8 +21,8 @@ IntervalometerAction:: IntervalometerAction(
     _countdownStyle(TIME),
     _shooting(false),
     _lcd(lcd),
-    _lcdRowGraph(lcd, 0, 25, 0, 0, 4),
-    _focusShootDelayAction(1, 500, focusPin, shootPin, itmi)
+    _lcdRowGraph(lcd, 0, 1, 0, 0, 4),
+    _focusShootDelayAction(1, DefaultFSDelay, focusPin, shootPin, itmi)
 {
 }
 
@@ -326,7 +326,7 @@ IntervalometerAction:: action()
         }
         else
         {
-            _shotTimeCountDown = _shotInterval * 25;
+            _shotTimeCountDown = _shotInterval * ActionsPerSec;
         }
     }
     else
@@ -353,8 +353,9 @@ IntervalometerAction:: display()
     {
         if ((_countdownStyle == TIME) && (_shotInterval > 1))
         {
-            uint16_t minutes = _shotTimeCountDown / 1500;
-            uint16_t seconds = (_shotTimeCountDown / 25) % 60;
+            uint16_t countDownSecs = _shotTimeCountDown / ActionsPerSec;
+            uint16_t minutes = countDownSecs / 60;
+            uint16_t seconds = countDownSecs % 60;
 
             if (minutes < 10)
             {
@@ -374,7 +375,7 @@ IntervalometerAction:: display()
         }
         else
         {
-            _lcdRowGraph.setMinMax(0, (_shotInterval * 25) - 1);
+            _lcdRowGraph.setMinMax(0, (_shotInterval * ActionsPerSec) - 1);
             _lcdRowGraph.value(_shotTimeCountDown);
         }
 
