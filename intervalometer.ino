@@ -17,6 +17,7 @@ IntervalometerAction intervalometerAction(
     1,                        // default shot interval (seconds)
     2,                        // focus pin
     3,                        // shoot pin
+    10,                          // backlight pin
     intervalTimerManager,
     lcd);
 

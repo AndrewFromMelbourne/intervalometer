@@ -9,6 +9,7 @@ IntervalometerAction:: IntervalometerAction(
     uint32_t shotInterval,
     uint8_t focusPin,
     uint8_t shootPin,
+    uint8_t backlightPin,
     IntervalTimerManagerInterface& itmi,
     LiquidCrystal& lcd)
 :
@@ -20,6 +21,8 @@ IntervalometerAction:: IntervalometerAction(
     _menu(INTERVAL),
     _countdownStyle(TIME),
     _shooting(false),
+	_backlightPin(backlightPin),
+	_backlightValue(255),
     _lcd(lcd),
     _lcdRowGraph(lcd, 0, 1, 0, 0, 4),
     _focusShootDelayAction(1, DefaultFSDelay, focusPin, shootPin, itmi)
@@ -31,6 +34,8 @@ IntervalometerAction:: IntervalometerAction(
 void
 IntervalometerAction:: begin()
 {
+	pinMode(_backlightPin, OUTPUT);
+	analogWrite(_backlightPin, _backlightValue);
     display();
 }
 
@@ -85,7 +90,7 @@ IntervalometerAction:: up()
         {
         case INTERVAL:
 
-            _menu = NUMBER_OF_SHOTS;
+            _menu = BACKLIGHT;
             break;
 
         case FOCUS_SHOOT_DELAY:
@@ -96,6 +101,11 @@ IntervalometerAction:: up()
         case NUMBER_OF_SHOTS:
 
             _menu = FOCUS_SHOOT_DELAY;
+			break;
+
+		case BACKLIGHT:
+
+            _menu = NUMBER_OF_SHOTS;
             break;
 
         }
@@ -128,6 +138,11 @@ IntervalometerAction:: down()
             break;
 
         case NUMBER_OF_SHOTS:
+
+            _menu = BACKLIGHT;
+            break;
+
+		case BACKLIGHT:
 
             _menu = INTERVAL;
             break;
@@ -215,6 +230,20 @@ IntervalometerAction:: left()
             }
 
             break;
+
+        case BACKLIGHT:
+
+			if (_backlightValue > 15)
+			{
+				_backlightValue -= 15;
+			}
+			else
+			{
+				_backlightValue = 0;
+			}
+			analogWrite(_backlightPin, _backlightValue);
+
+			break;
         }
 
         display();
@@ -286,6 +315,20 @@ IntervalometerAction:: right()
             }
 
             break;
+
+        case BACKLIGHT:
+
+			if (_backlightValue < 240)
+			{
+				_backlightValue += 15;
+			}
+			else
+			{
+				_backlightValue = 255;
+			}
+			analogWrite(_backlightPin, _backlightValue);
+
+			break;
         }
 
         display();
@@ -375,6 +418,7 @@ IntervalometerAction:: display()
         }
         else
         {
+            _lcdRowGraph.setColumns(0, 4);
             _lcdRowGraph.setMinMax(0, (_shotInterval * ActionsPerSec) - 1);
             _lcdRowGraph.value(_shotTimeCountDown);
         }
@@ -416,6 +460,16 @@ IntervalometerAction:: display()
         case NUMBER_OF_SHOTS:
 
             _lcd.print(F("number of shots "));
+            break;
+
+        case BACKLIGHT:
+
+            _lcd.print(F("backlight"));
+
+            _lcdRowGraph.setColumns(9, 15);
+            _lcdRowGraph.setMinMax(0, 255);
+            _lcdRowGraph.value(_backlightValue);
+
             break;
         }
     }

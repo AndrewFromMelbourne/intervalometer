@@ -20,7 +20,7 @@ class IntervalometerAction
 {
 public:
 
-    enum Menu { INTERVAL, FOCUS_SHOOT_DELAY, NUMBER_OF_SHOTS };
+    enum Menu { INTERVAL, FOCUS_SHOOT_DELAY, NUMBER_OF_SHOTS, BACKLIGHT };
     enum CountdownStyle { TIME, GRAPH };
 
     IntervalometerAction(
@@ -28,6 +28,7 @@ public:
         uint32_t shotInterval,
         uint8_t focusPin,
         uint8_t shootPin,
+        uint8_t backlightPin,
         IntervalTimerManagerInterface& itmi,
         LiquidCrystal& lcd);
 
@@ -67,6 +68,8 @@ private:
     Menu _menu;
     CountdownStyle _countdownStyle;
     boolean _shooting;
+    uint8_t _backlightPin;
+    uint8_t _backlightValue;
     LiquidCrystal& _lcd;
     LcdRowGraph _lcdRowGraph;
     FocusShootDelayAction _focusShootDelayAction;
