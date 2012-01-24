@@ -21,8 +21,8 @@ IntervalometerAction:: IntervalometerAction(
     _menu(INTERVAL),
     _countdownStyle(TIME),
     _shooting(false),
-	_backlightPin(backlightPin),
-	_backlightValue(255),
+    _backlightPin(backlightPin),
+    _backlightValue(255),
     _lcd(lcd),
     _lcdRowGraph(lcd, 0, 1, 0, 0, 4),
     _focusShootDelayAction(1, DefaultFSDelay, focusPin, shootPin, itmi)
@@ -34,8 +34,8 @@ IntervalometerAction:: IntervalometerAction(
 void
 IntervalometerAction:: begin()
 {
-	pinMode(_backlightPin, OUTPUT);
-	analogWrite(_backlightPin, _backlightValue);
+    pinMode(_backlightPin, OUTPUT);
+    analogWrite(_backlightPin, _backlightValue);
     display();
 }
 
@@ -101,9 +101,9 @@ IntervalometerAction:: up()
         case NUMBER_OF_SHOTS:
 
             _menu = FOCUS_SHOOT_DELAY;
-			break;
+            break;
 
-		case BACKLIGHT:
+        case BACKLIGHT:
 
             _menu = NUMBER_OF_SHOTS;
             break;
@@ -142,7 +142,7 @@ IntervalometerAction:: down()
             _menu = BACKLIGHT;
             break;
 
-		case BACKLIGHT:
+        case BACKLIGHT:
 
             _menu = INTERVAL;
             break;
@@ -233,20 +233,15 @@ IntervalometerAction:: left()
 
         case BACKLIGHT:
 
-			if (_backlightValue > 15)
-			{
-				_backlightValue -= 15;
-			}
-			else
-			{
-				_backlightValue = 0;
-			}
-			analogWrite(_backlightPin, _backlightValue);
-
-			break;
+            decrementBacklightValue();
+            break;
         }
 
         display();
+    }
+    else
+    {
+        decrementBacklightValue();
     }
 }
 
@@ -318,20 +313,15 @@ IntervalometerAction:: right()
 
         case BACKLIGHT:
 
-			if (_backlightValue < 240)
-			{
-				_backlightValue += 15;
-			}
-			else
-			{
-				_backlightValue = 255;
-			}
-			analogWrite(_backlightPin, _backlightValue);
-
-			break;
+            incrementBacklightValue();
+            break;
         }
 
         display();
+    }
+    else
+    {
+        incrementBacklightValue();
     }
 }
 
@@ -531,6 +521,38 @@ IntervalometerAction:: formatShots(
 
         _lcd.print(number, DEC);
     }
+}
+
+//-------------------------------------------------------------------------
+
+void
+IntervalometerAction:: incrementBacklightValue()
+{
+    if (_backlightValue < 240)
+    {
+        _backlightValue += 15;
+    }
+    else
+    {
+        _backlightValue = 255;
+    }
+    analogWrite(_backlightPin, _backlightValue);
+}
+
+//-------------------------------------------------------------------------
+
+void
+IntervalometerAction:: decrementBacklightValue()
+{
+    if (_backlightValue > 15)
+    {
+        _backlightValue -= 15;
+    }
+    else
+    {
+        _backlightValue = 0;
+    }
+    analogWrite(_backlightPin, _backlightValue);
 }
 
 //-------------------------------------------------------------------------

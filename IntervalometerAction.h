@@ -56,6 +56,9 @@ private:
     void display();
     void formatShots(uint32_t number);
 
+    void incrementBacklightValue();
+    void decrementBacklightValue();
+
     static uint16_t intervals[9];
 
     static uint16_t incrementInterval(uint16_t interval);
