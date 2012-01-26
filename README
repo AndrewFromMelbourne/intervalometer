@@ -1,0 +1,18 @@
+Arduino camera intervalometer sketch. Requires standard arduino and LCD
+shield that is compatible with the LiquidCrystal library.
+
+This sketch required version 1.0 (or above) of the Arduino IDE.
+It also requires the following libraries:-
+
+AnalogButtonManager
+IntervalTimerManager
+LcdRowGraph
+
+available from here:-
+
+    https://github.com/AndrewFromMelbourne
+
+You will also need to connect the Arduino to you camera as described in the
+book: Practical Arduino.
+
+    http://practicalarduino.com/projects/time-lapse-camera-controller
