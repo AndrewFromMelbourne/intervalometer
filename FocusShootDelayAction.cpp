@@ -28,9 +28,8 @@ FocusShootDelayAction:: FocusShootDelayAction(
     _focusPin(focusPin),
     _shootPin(shootPin)
 {
-    pinMode(13, OUTPUT);
-    //pinMode(_focusPin, OUTPUT);
-    //pinMode(_shootPin, OUTPUT);
+    pinMode(_focusPin, OUTPUT);
+    pinMode(_shootPin, OUTPUT);
 }
 
 //-------------------------------------------------------------------------
@@ -55,11 +54,8 @@ FocusShootDelayAction:: focusAndShoot()
 void
 FocusShootDelayAction:: press()
 {
-    digitalWrite(13, HIGH);
-
-    // FIXME focus
-    //digitalWrite(_focusPin, HIGH);
-    //digitalWrite(_shootPin, HIGH);
+    digitalWrite(_focusPin, HIGH);
+    digitalWrite(_shootPin, HIGH);
 
 }
 
@@ -68,11 +64,8 @@ FocusShootDelayAction:: press()
 void
 FocusShootDelayAction:: release()
 {
-    digitalWrite(13, LOW);
-
-    // FIXME shoot
-    //digitalWrite(_shootPin, LOW);
-    //digitalWrite(_focusPin, LOW);
+    digitalWrite(_shootPin, LOW);
+    digitalWrite(_focusPin, LOW);
 }
 
 //-------------------------------------------------------------------------
