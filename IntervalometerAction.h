@@ -63,7 +63,7 @@ private:
 
     static const uint8_t ActionsPerSec = 25;
     static const uint8_t ActionInterval = 40;
-    static const uint8_t DefaultFSDelay = 500;
+    static const uint32_t DefaultFSDelay = 500;
 
     void display();
     void formatShots(uint32_t number);
