@@ -184,7 +184,7 @@ IntervalometerAction:: left()
 
             if (_shotInterval >= 60)
             {
-                uint32_t minutes = _shotInterval/60;
+                uint32_t minutes = _shotInterval / 60;
 
                 if (minutes > 1)
                 {
@@ -272,7 +272,7 @@ IntervalometerAction:: right()
 
             if (_shotInterval >= 60)
             {
-                uint32_t minutes = _shotInterval/60;
+                uint32_t minutes = _shotInterval / 60;
                 minutes = incrementInterval(minutes);
                 _shotInterval = minutes * 60;
             }
@@ -400,9 +400,9 @@ IntervalometerAction:: display()
     {
         if ((_countdownStyle == TIME) && (_shotInterval > 1))
         {
-            uint16_t countDownSecs = _shotTimeCountDown / ActionsPerSec;
-            uint16_t minutes = countDownSecs / 60;
-            uint16_t seconds = countDownSecs % 60;
+            uint32_t countDownSecs = _shotTimeCountDown / ActionsPerSec;
+            uint32_t minutes = countDownSecs / 60;
+            uint32_t seconds = countDownSecs % 60;
 
             if (minutes < 10)
             {
@@ -484,7 +484,7 @@ IntervalometerAction:: display()
 
     if (_shotInterval >= 60)
     {
-        uint32_t minutes = _shotInterval/60;
+        uint32_t minutes = _shotInterval / 60;
 
         if (minutes < 10)
         {
@@ -571,16 +571,16 @@ IntervalometerAction:: decrementBacklightValue()
 
 //-------------------------------------------------------------------------
 
-uint16_t
+uint32_t
 IntervalometerAction:: intervals[9] = { 1, 2, 4, 5, 10, 20, 30, 40, 60 };
 
 //-------------------------------------------------------------------------
 
-uint16_t
+uint32_t
 IntervalometerAction:: incrementInterval(
-    uint16_t interval)
+    uint32_t interval)
 {
-    uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+    uint16_t numberOfIntervals = sizeof(intervals) / sizeof(intervals[0]);
 
     if (interval >= intervals[numberOfIntervals - 1])
     {
@@ -588,7 +588,7 @@ IntervalometerAction:: incrementInterval(
     }
     else
     {
-        for (uint8_t i = 0 ; i < numberOfIntervals ; ++i)
+        for (uint16_t i = 0 ; i < numberOfIntervals ; ++i)
         {
             if (interval < intervals[i])
             {
@@ -603,11 +603,11 @@ IntervalometerAction:: incrementInterval(
 
 //-------------------------------------------------------------------------
 
-uint16_t
+uint32_t
 IntervalometerAction:: decrementInterval(
-    uint16_t interval)
+    uint32_t interval)
 {
-    uint16_t numberOfIntervals = sizeof(intervals)/sizeof(intervals[0]);
+    uint16_t numberOfIntervals = sizeof(intervals) / sizeof(intervals[0]);
 
     if (interval  <= intervals[0])
     {
@@ -615,7 +615,7 @@ IntervalometerAction:: decrementInterval(
     }
     else
     {
-        for (int8_t i = numberOfIntervals - 1 ; i >= 0 ; --i)
+        for (int16_t i = numberOfIntervals - 1 ; i >= 0 ; --i)
         {
             if (interval > intervals[i])
             {
@@ -629,3 +629,4 @@ IntervalometerAction:: decrementInterval(
 }
 
 //-------------------------------------------------------------------------
+

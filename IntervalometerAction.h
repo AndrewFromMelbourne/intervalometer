@@ -61,8 +61,8 @@ public:
 
 private:
 
-    static const uint8_t ActionsPerSec = 25;
-    static const uint8_t ActionInterval = 40;
+    static const uint32_t ActionsPerSec = 25;
+    static const uint32_t ActionInterval = 40;
     static const uint32_t DefaultFSDelay = 500;
 
     void display();
@@ -71,15 +71,15 @@ private:
     void incrementBacklightValue();
     void decrementBacklightValue();
 
-    static uint16_t intervals[9];
+    static uint32_t intervals[9];
 
-    static uint16_t incrementInterval(uint16_t interval);
-    static uint16_t decrementInterval(uint16_t interval);
+    static uint32_t incrementInterval(uint32_t interval);
+    static uint32_t decrementInterval(uint32_t interval);
 
     uint32_t _numberOfShots;
     uint32_t _shotNumber;
-    uint16_t _shotInterval;
-    uint16_t _shotTimeCountDown;
+    uint32_t _shotInterval;
+    uint32_t _shotTimeCountDown;
     Menu _menu;
     CountdownStyle _countdownStyle;
     boolean _shooting;

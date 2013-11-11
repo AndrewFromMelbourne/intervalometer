@@ -29,46 +29,46 @@ IntervalometerAction intervalometerAction(
     1,                        // default shot interval (seconds)
     2,                        // focus pin
     3,                        // shoot pin
-    10,                          // backlight pin
+    10,                       // backlight pin
     intervalTimerManager,
     lcd);
 
 IntervalometerButton b1(
     IntervalometerButton::RIGHT,
     0,                        // low analog value
-    20,                        // high analog value
+    20,                       // high analog value
     analogButtonManager,
     intervalometerAction,
     &IntervalometerAction::right);
 
 IntervalometerButton b2(
     IntervalometerButton::UP,
-    135,                        // low analog value
-    155,                        // high analog value
+    135,                      // low analog value
+    155,                      // high analog value
     analogButtonManager,
     intervalometerAction,
     &IntervalometerAction::up);
 
 IntervalometerButton b3(
     IntervalometerButton::DOWN,
-    319,                        // low analog value
-    339,                        // high analog value
+    319,                      // low analog value
+    339,                      // high analog value
     analogButtonManager,
     intervalometerAction,
     &IntervalometerAction::down);
 
 IntervalometerButton b4(
     IntervalometerButton::LEFT,
-    495,                        // low analog value
-    515,                        // high analog value
+    495,                      // low analog value
+    515,                      // high analog value
     analogButtonManager,
     intervalometerAction,
     &IntervalometerAction::left);
 
 IntervalometerButton b5(
     IntervalometerButton::SELECT,
-    731,                        // low analog value
-    751,                        // high analog value
+    731,                      // low analog value
+    751,                      // high analog value
     analogButtonManager,
     intervalometerAction,
     &IntervalometerAction::select);
